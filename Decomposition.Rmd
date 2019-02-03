@@ -1,0 +1,45 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+setwd('/home/jay/Documents/Forecasting/')
+library(tsutils)
+library(forecast)
+
+data = read.table('Sales.txt')
+data = ts(data, frequency = 12, start = c(2011, 1))
+
+frequency(data)
+
+plot(data)
+
+#create data
+data1 <- 1:20
+
+plot(data1, type = 'l', col='blue')
+
+
+data_cma = cmav(data, ma = 12, fill = F)
+
+#Plot the original time series in blue
+plot(data, col='blue')
+
+#plot the cma(12) in red
+lines(data_cma, col ='red')
+
+seasplot(data)
+
+data_seas_index = seasplot(data)$season
+
+decomp = decomp(data, decomposition = "multiplicative", outplot = T)
+decomp(data,decomposition = "additive", outplot = TRUE)
+  str(decomp)
+  
+  decomp$irregular
+  
+regular_components <- decomp$trend * decomp$season
+mmm_errors <- data - regular_components
+err = decomp$irregular - mmm_errors
+```
